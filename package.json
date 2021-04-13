@@ -1,0 +1,38 @@
+{
+    "name": "imgShareType",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "build": "tsc",
+        "clean": "rimraf dist",
+        "start": "npm run build && node dist/index.js",
+        "dev": "nodemon src/index.ts"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/express": "^4.17.11",
+        "nodemon": "^2.0.7",
+        "typescript": "^4.2.4"
+    },
+    "dependencies": {
+        "@types/fs-extra": "^9.0.11",
+        "@types/md5": "^2.3.0",
+        "@types/morgan": "^1.9.2",
+        "@types/multer": "^1.4.5",
+        "@types/uuid": "^8.3.0",
+        "express": "^4.17.1",
+        "fs-extra": "^9.1.0",
+        "md5": "^2.3.0",
+        "moment": "^2.29.1",
+        "mongoose": "^5.12.3",
+        "morgan": "^1.10.0",
+        "multer": "^1.4.2",
+        "pug": "^3.0.2",
+        "rimraf": "^3.0.2",
+        "ts-node": "^9.1.1",
+        "uuid": "^8.3.2"
+    }
+}

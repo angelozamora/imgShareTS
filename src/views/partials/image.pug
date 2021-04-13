@@ -1,0 +1,114 @@
+extends ../layout/layout
+
+
+block content
+  .card   
+    div(class="card-header d-flex justify-content-between align-items-center")
+      h2=image.title
+      button(class="btn btn-danger" id="btn-delete" data-id=image.uniqueId )
+        i.fa.fa-times 
+        span.ms-1 Delete
+        
+    div.card-body
+      p= image.description
+      div.text-center
+        img(src=`/public/upload/${image.fileName}`, alt="" class="img-fluid")
+    
+    div(class="card-footer d-flex justify-content-between align-items-center")
+      button(class="btn btn-success" id="btn-like" data-id=image.uniqueId )
+        i.fa.fa-thumbs-up: span.ms-1 Like
+      
+      p 
+        span.likes-count= image.like 
+        i.fas.fa-heart
+
+      p 
+        i.fas.fa-eye
+        span.ms-1=image.views  
+
+      p 
+        i.far.fa-clock
+        span.ms-1= timeAgo(image.timestamp)   
+
+  .card.mt-3 
+    div(class="card-header d-flex justify-content-between align-items-center")
+      h3 Comments
+      button(class="btn btn-info" id="btn-toggle-comment" )
+        i.fa.fa-coments-i: span.ms-1 Post a comment
+
+    div.card-body
+      div 
+        form(action=`/images/${image._id}/comment`  method = "POST") 
+          div.mb-3   
+            input(type="text" class="form-control" name="name" placeholder = "Name" required)
+
+          div.mb-3   
+            input(type="text" class="form-control" name="email" placeholder = "Email")
+
+          div.mb-3   
+            textarea(type="textarea" rows="2" class="form-control" name="comment" placeholder = "Your Comemnt" required)
+
+          div.mb-2.d-flex.justify-content-end
+            button(type="submit" class="btn btn-success"): i.fa.fa-comment: span.ms-1 Post 
+
+
+      ul.list-group.p-4 
+        each comment in comments
+          li.list-group-item  
+            div.row  
+              a(href="#" class="col text-center")  
+                img(src=`http://gravatar.com/avatar/${comment.gravatar}?d=monsterid&s=45`)  
+              div.col 
+                p.lead=comment.comment   
+                footer.blockquote-footer=comment.name +" - "+ timeAgo(image.timestamp) 
+
+
+
+
+  script.
+    let btnLike = document.getElementById('btn-like')
+    let btnDelete = document.getElementById('btn-delete')
+    let btnDeleteIcon = document.querySelector('#btn-delete i')
+    let likesCount = document.querySelector('.likes-count')
+
+    btnLike.addEventListener('click' , (e)=>{
+      e.preventDefault();
+      fetch("/images/#{image._id}/like", {
+        method : "POST",
+        headers: { 'Content-Type': 'application/json'  }
+      }).then( res => {
+        return res.json()
+      }).then(res => {
+        console.log(res)
+        likesCount.innerText=res.like
+      })
+    })
+
+    btnDelete.addEventListener('click' , (e)=>{
+      e.preventDefault()
+
+      innerBtnDelete = `
+        <i class="fa fa-check"></i>
+        <span class="ms-1">Deleted</span>
+      `;
+
+      if(confirm('Seguro que quieres eliminar esta imagen')){
+        console.log('Eliminar')
+
+        fetch("/images/#{image._id}", {
+          method : "DELETE",
+          headers: { 'Content-Type': 'application/json'  }
+        }).then( res => {
+            console.log("eliminado")
+            console.log(res)
+            btnDelete.classList.remove('btn-danger');
+            btnDelete.classList.add('btn-success');
+            btnDelete.innerHTML = innerBtnDelete;
+
+            setTimeout((e)=> {
+              window.location='/'    
+            },3000)
+        })
+      }
+    })
+

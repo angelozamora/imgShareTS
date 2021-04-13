@@ -1,0 +1,35 @@
+extends ../layout/layout
+
+block content
+  div.card
+    div.card-header.bg-dark.py-3
+      h3.card-title.card-text.text-white 
+        i.far.fa-image: span.ms-2 Upload and Image
+    div.card-body
+      form( action="/images" method="POST" enctype="multipart/form-data" )
+
+          div.mb-3.input-group
+            input(type="file" class="form-control" id="inputFile" name="image" required)
+            label(class="input-group-text" for="inputFile") Browse
+          
+          div.mb-3
+            input(type="text" class="form-control"  name="title" placeholder = "Title for the image" required)
+
+          div.mb-3
+            textarea(type="textarea" class="form-control"  name="description"  row="2" placeholder = "Description for image" required)
+
+          div.mb-2.d-flex.justify-content-end
+            button(type="submit" class="btn btn-success"): i.fa.fa-upload Upload Image 
+
+
+
+  div.card.mt-3
+    div.card-header.bg-dark.py-3
+      h3.card-title.card-text.text-white 
+        i.far.fa-image: span.ms-2 Recent Uploads
+    div.card-body
+      div.row   
+        each image in images 
+          div.col-md-4.p-2.card-image
+            a(href=`/images/${image._id}`)
+              img(src=`/public/upload/${image.fileName}`, alt="")
